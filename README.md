@@ -7,20 +7,6 @@
 
 ## Assignment Description
 
-
-
-Got it! Here's a clean, professional version of your references section in basic Markdown, ready to paste into your `README.md`:
-
----
-
-Sure! Here's your updated `README.md` reference section with the **DigitalOcean Flask templates tutorial** included in the appropriate category:
-
----
-
-Absolutely! Here’s your updated `## References` section with the **Alpha Vantage API** and **dotenv/secure API key handling** references added in a new section:
-
----
-
 ## References
 
 ### Flask Project Structure & Blueprints

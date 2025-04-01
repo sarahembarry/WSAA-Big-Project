@@ -172,3 +172,41 @@ cython_debug/
 
 # PyPI configuration file
 .pypirc
+
+
+
+# Byte-compiled / cache
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Virtual environment
+venv/
+.env
+
+# Environment variables and secrets
+.env
+
+# Flask-related
+instance/
+*.db
+*.sqlite3
+
+# Editor/IDE-specific
+.vscode/
+.idea/
+*.swp
+
+# macOS-specific
+.DS_Store
+
+# Log files
+*.log
+
+# Test artifacts
+coverage.xml
+htmlcov/
+.pytest_cache/
+
+# Compiled extensions
+*.so
