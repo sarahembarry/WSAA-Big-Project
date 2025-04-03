@@ -1,14 +1,12 @@
-from flask import Flask
-from routes import main 
-from dotenv import load_dotenv
-import os
-
-load_dotenv()
-api_key = os.getenv("ALPHAVANTAGE_API_KEY")
+from flask import Flask, jsonify
+from stock_api import fetch_stock_data
 
 app = Flask(__name__)
-app.register_blueprint(main)
 
-if __name__ == "__main__":
-    print(f"API Key loaded: {api_key is not None}")
+@app.route('/api/stock/<symbol>')
+def get_stock(symbol):
+    data = fetch_stock_data(symbol.upper())
+    return jsonify(data)
+
+if __name__ == '__main__':
     app.run(debug=True)

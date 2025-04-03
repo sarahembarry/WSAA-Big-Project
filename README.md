@@ -7,6 +7,7 @@
 
 ## Assignment Description
 
+
 ## References
 
 ### Flask Project Structure & Blueprints
@@ -30,5 +31,8 @@
 - Alpha Vantage – [Get Your Free API Key](https://www.alphavantage.co/support/#api-key)
 - Real Python – [How to Use Environment Variables in Python](https://realpython.com/flask-database/)
 - Medium – [How to Use Environment Variables in Python for Secure Configuration](https://medium.com/datauniverse/how-to-use-environment-variables-in-python-for-secure-configuration-12d56c7f0a8c)
+- Omi.me – [How to Fetch Stock Data Using Alpha Vantage API in Python](https://www.omi.me/blogs/api-guides/how-to-fetch-stock-data-using-alpha-vantage-api-in-python)
+
+
 
 
