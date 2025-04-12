@@ -17,7 +17,8 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///stocks.db'
 db.init_app(app)
 
 # Register the blueprint
-app.register_blueprint(stock_routes)
+app.register_blueprint(stock_routes, url_prefix='/api/stocks')
+
 
 # Create the database tables 
 with app.app_context():
