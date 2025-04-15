@@ -44,3 +44,4 @@ def delete_stock(id):
     db.session.delete(stock) # Delete stock from database
     db.session.commit()  # Save changes to DB
     return jsonify({'message': 'Stock deleted'}) # Return success message
+
