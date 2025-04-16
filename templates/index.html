@@ -41,7 +41,35 @@
     </div>
   </div>
 
-  <!-- JavaScript file for handling API requests -->
+
+  <!-- Search Live Stock -->
+<div class="card mb-4">
+  <div class="card-header">Search Live Stock</div>
+  <div class="card-body">
+    <form id="searchStockForm">
+      <input type="text" id="searchSymbol" class="form-control mb-2" placeholder="Enter Stock Symbol" required>
+      <button class="btn btn-success" type="submit">Get Live Data</button>
+    </form>
+    <div id="liveStockResult" class="mt-3"></div>
+  </div>
+</div>
+
+<!-- Card: All Stocks -->
+<div class="card mb-4">
+  <div class="card-header">All Stocks</div>
+  <div class="card-body" id="stocksContainer">
+    <!-- JavaScript will fill this in -->
+  </div>
+</div>
+
+
+<!-- Temporary test button for adding stock ID 1 to watchlist -->
+<button class="btn btn-success btn-sm" onclick="addToWatchlist(3)">Add Stock ID 1 to Watchlist</button>
+
+
+  
+
+<!-- JavaScript file for handling API requests -->
   <script src="/static/app.js"></script>
 
 </body>

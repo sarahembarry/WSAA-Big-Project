@@ -46,13 +46,14 @@
 | Bootstrap Containers | [Bootstrap – Layout Containers](https://getbootstrap.com/docs/5.3/layout/containers/) | `templates/index.html` |
 | Bootstrap Cards | [Bootstrap – Components: Card](https://getbootstrap.com/docs/5.3/components/card/) | `templates/index.html` |
 | Bootstrap Form Input | [Bootstrap – Forms: Input Group](https://getbootstrap.com/docs/5.3/forms/input-group/) | `templates/index.html` |
-| Topic                          | Reference                                                                                                                      | Where Used                       |
-|-------------------------------|--------------------------------------------------------------------------------------------------------------------------------|----------------------------------|
 | JavaScript – alert()          | [MDN – Window.alert()](https://developer.mozilla.org/en-US/docs/Web/API/Window/alert)                                         | `app.js`                         |
 | JavaScript – Fetch API        | [DigitalOcean – JavaScript Fetch API](https://www.digitalocean.com/community/tutorials/how-to-use-the-javascript-fetch-api-to-get-data? | `app.js`                         |
 | JavaScript – getElementById   | [MDN – Document.getElementById](https://developer.mozilla.org/en-US/docs/Web/API/Document/getElementById)                     | `app.js`                         |
 | JavaScript – preventDefault() | [W3Schools – event.preventDefault()](https://www.w3schools.com/jsref/event_preventdefault.asp)                                | `app.js`                         |
 | JavaScript – response.json()  | [MDN – Response.json()](https://developer.mozilla.org/en-US/docs/Web/API/Response/json)                                       | `app.js`                         |
+| Bootstrap Buttons | [W3Schools – Bootstrap Buttons](https://www.w3schools.com/bootstrap/bootstrap_buttons.asp) | `templates/index.html` |
+| Bootstrap Flex | [W3Schools – Bootstrap 4 Flex](https://www.w3schools.com/bootstrap4/bootstrap_flex.asp) | `templates/index.html` |
+| JavaScript DOM & Loops | [Medium – Using forEach and innerHTML to Create Search Results](https://medium.com/@ianflurkey/using-foreach-and-innerhtml-to-create-search-results-6b11b9985d6b) | `static/app.js` |
 
 
 ---
