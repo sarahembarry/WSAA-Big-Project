@@ -54,7 +54,9 @@
 | Bootstrap Buttons | [W3Schools – Bootstrap Buttons](https://www.w3schools.com/bootstrap/bootstrap_buttons.asp) | `templates/index.html` |
 | Bootstrap Flex | [W3Schools – Bootstrap 4 Flex](https://www.w3schools.com/bootstrap4/bootstrap_flex.asp) | `templates/index.html` |
 | JavaScript DOM & Loops | [Medium – Using forEach and innerHTML to Create Search Results](https://medium.com/@ianflurkey/using-foreach-and-innerhtml-to-create-search-results-6b11b9985d6b) | `static/app.js` |
-
+| JavaScript Confirm Delete   | [SitePoint – Confirm Before Delete](https://www.sitepoint.com/community/t/confirm-before-delete/221197) | `app.js`   |
+| SQLAlchemy Cascade Delete   | [Dev.to – SQLAlchemy Cascading Deletes](https://dev.to/zchtodd/sqlalchemy-cascading-deletes-8hk) | `models.py`                       |
+| SQLAlchemy Relationship API | [SQLAlchemy Docs – relationship API](https://docs.sqlalchemy.org/en/14/orm/relationship_api.html) | `models.py` |
 
 ---
 

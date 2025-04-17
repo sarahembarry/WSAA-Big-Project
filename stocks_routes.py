@@ -30,18 +30,27 @@ def get_stocks():
 # Route: Update a stock (PUT)
 @stock_routes.route('/<int:id>', methods=['PUT'])
 def update_stock(id):
-    stock = Stock.query.get_or_404(id) # Find stock or return 404
-    data = request.get_json()
-    stock.symbol = data['symbol'].upper() # Update symbol
-    stock.company_name = data['company_name'] # Update company name
-    db.session.commit() # Save changes to DB
-    return jsonify({'message': 'Stock updated'}) # Return success message
+    stock = Stock.query.get_or_404(id)  # Find stock or return 404
+    data = request.get_json()           # Parse JSON payload
+
+    # Update fields only if they are provided
+    if 'symbol' in data:
+        stock.symbol = data['symbol'].upper()
+    if 'company_name' in data:
+        stock.company_name = data['company_name']
+
+    db.session.commit()  # Save changes to the database
+    return jsonify({'message': 'Stock updated'})  # Return success message
 
 # Delete a stock (DELETE)
 @stock_routes.route('/<int:id>', methods=['DELETE'])
 def delete_stock(id):
-    stock = Stock.query.get_or_404(id) # Find stock or return 404
-    db.session.delete(stock) # Delete stock from database
-    db.session.commit()  # Save changes to DB
-    return jsonify({'message': 'Stock deleted'}) # Return success message
-
+    try:
+     stock = Stock.query.get_or_404(id) # Find stock or return 404
+     db.session.delete(stock) # Delete stock from database
+     db.session.commit()  # Save changes to DB
+     return jsonify({'message': 'Stock deleted'}) # Return success message
+    
+    except Exception as e:
+        print("Delete failed:", e)  # Log error to terminal
+        return jsonify({'error': 'Delete failed'}), 500
