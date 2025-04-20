@@ -1,83 +1,80 @@
 // JavaScript fetch-based form submission (see README for references: fetch API, preventDefault, JSON.stringify)
 
 
+// Combined Search + Add to Stocks
+// Search for live stock data by symbol, show result, allow entering company name, then add it
 
+document.getElementById('searchAddStockForm').addEventListener('submit', function (e) {
+  e.preventDefault();
+  const symbol = document.getElementById('searchSymbolCombined').value;
 
-// Add new stock to the database using a form (via POST /api/stocks)
-document.getElementById('addStockForm').addEventListener('submit', function (e) {
-  e.preventDefault(); // Prevent page reload
-
-  const symbol = document.getElementById('symbol').value;
-  const companyName = document.getElementById('companyName').value;
-
-  // Send stock data to backend
-  fetch('/api/stocks/', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({
-      symbol: symbol,
-      company_name: companyName
-    })
-  })
-  .then(response => response.json())
-  .then(data => {
-    alert(data.message); // Show success message
-    document.getElementById('addStockForm').reset(); // Reset form
-  })
-  .catch(err => console.error('Error:', err));
-});
-
-
-
-// Search for live stock data by symbol (via GET /api/live/<symbol>)
-document.getElementById('searchStockForm').addEventListener('submit', function (e) {
-  e.preventDefault(); // Prevent page reload
-
-  const symbol = document.getElementById('searchSymbol').value;
-
-  // Fetch stock data from backend
   fetch(`/api/live/${symbol}`)
-    .then(response => response.json())
+    .then(res => res.json())
     .then(data => {
-      // Display stock info
-      const result = `
-        <div class="alert alert-info">
+      const resultDiv = document.getElementById('searchAddResult');
+
+      if (data.error) {
+        resultDiv.innerHTML = `<div class="alert alert-danger mt-2">${data.error}</div>`;
+        return;
+      }
+
+      resultDiv.innerHTML = `
+        <div class="alert alert-info mt-2">
           <strong>${symbol.toUpperCase()}</strong><br>
           Price: ${data.price}<br>
           Date: ${data.timestamp}
         </div>
+        <input type="text" id="companyNameCombined" class="form-control mb-2 mt-2" placeholder="Enter Company Name" required>
+        <button class="btn btn-primary" onclick="addStockFromSearch('${symbol.toUpperCase()}')">Add to Stocks</button>
       `;
-      document.getElementById('liveStockResult').innerHTML = result;
-      document.getElementById('searchStockForm').reset();
     })
     .catch(err => {
       console.error('Error:', err);
-      document.getElementById('liveStockResult').innerHTML =
-        `<div class="alert alert-danger">Stock not found</div>`;
+      document.getElementById('searchAddResult').innerHTML =
+        `<div class="alert alert-danger mt-2">Error fetching stock data.</div>`;
     });
 });
 
 
+// Add stock using symbol + user-provided company name
+function addStockFromSearch(symbol) {
+  const companyName = document.getElementById('companyNameCombined').value;
+  if (!companyName) {
+    alert('Please enter a company name.');
+    return;
+  }
 
-// load all stocks and display them with action buttons
+  fetch('/api/stocks/', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ symbol, company_name: companyName })
+  })
+  .then(res => res.json())
+  .then(data => {
+    alert(data.message);
+    loadStocks();
+  })
+  .catch(err => console.error('Error adding stock:', err));
+}
+
+
+// Load all stocks and display them with action buttons
 function loadStocks() {
   fetch('/api/stocks/')
     .then(response => response.json())
     .then(data => {
       const container = document.getElementById('stocksContainer');
-      container.innerHTML = ''; // Clear previous entries
+      container.innerHTML = '';
 
       data.forEach(stock => {
         const stockCard = `
-          <div class="d-flex justify-content-between align-items-center mb-2">
+          <div class="d-flex justify-content-between align-items-center mb-3 p-2 border rounded">
             <div>
               <strong>${stock.symbol}</strong> - ${stock.company_name}
             </div>
             <div>
-              <button class="btn btn-sm btn-success me-1" onclick="addToWatchlist(${stock.id})">Watchlist</button>
-              <button class="btn btn-sm btn-warning me-1" onclick="updateStock(${stock.id})">Edit</button>
+              <button class="btn btn-sm btn-success me-2" onclick="addToWatchlist(${stock.id})">Watchlist</button>
+              <button class="btn btn-sm btn-warning me-2" onclick="updateStock(${stock.id})">Edit</button>
               <button class="btn btn-sm btn-danger" onclick="deleteStock(${stock.id})">Delete</button>
             </div>
           </div>
@@ -89,19 +86,22 @@ function loadStocks() {
 }
 
 
-
-
-// Load all watchlist items  
+// Load all watchlist items
 function loadWatchlist() {
   fetch('/api/watchlist/')
     .then(response => response.json())
     .then(data => {
       const container = document.getElementById('watchlistContainer');
-      container.innerHTML = ''; // Clear previous entries
+      container.innerHTML = '';
+
+      if (data.length === 0) {
+        container.innerHTML = '<div class="text-muted">No items in watchlist.</div>';
+        return;
+      }
 
       data.forEach(item => {
         const watchlistCard = `
-          <div class="d-flex justify-content-between align-items-center mb-2">
+          <div class="d-flex justify-content-between align-items-center mb-2 p-2 border rounded">
             <div>
               <strong>${item.symbol}</strong> - ${item.company_name}
             </div>
@@ -117,11 +117,6 @@ function loadWatchlist() {
 }
 
 
-
-
-
-
-
 // Add stock to watchlist by ID (via POST /api/watchlist)
 function addToWatchlist(stockId) {
   fetch('/api/watchlist/', {
@@ -129,13 +124,12 @@ function addToWatchlist(stockId) {
     headers: {
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify({
-      stock_id: stockId
-    })
+    body: JSON.stringify({ stock_id: stockId })
   })
   .then(response => response.json())
   .then(data => {
-    alert(data.message); // Confirm added to watchlist
+    alert(data.message);
+    loadWatchlist();
   })
   .catch(err => console.error('Error:', err));
 }
@@ -154,11 +148,10 @@ function updateStock(stockId) {
   .then(res => res.json())
   .then(data => {
     alert(data.message);
-    loadStocks(); // Reload stock list
+    loadStocks();
   })
   .catch(err => console.error('Error updating:', err));
 }
-
 
 
 // Delete a stock
@@ -171,13 +164,11 @@ function deleteStock(stockId) {
   .then(res => res.json())
   .then(data => {
     alert(data.message);
-    loadStocks(); // Reload stock list
+    loadStocks();
+    loadWatchlist();
   })
   .catch(err => console.error('Error deleting:', err));
 }
-
-
-
 
 
 // Fetch live prices for all stocks
@@ -186,14 +177,14 @@ function loadLivePrices() {
     .then(response => response.json())
     .then(stocks => {
       const container = document.getElementById('livePricesContainer');
-      container.innerHTML = ''; // Clear previous entries
+      container.innerHTML = '';
 
       stocks.forEach(stock => {
         fetch(`/api/live/${stock.symbol}`)
           .then(res => res.json())
           .then(data => {
             const card = `
-              <div class="border rounded p-2 mb-2">
+              <div class="border rounded p-2 mb-2 bg-light">
                 <strong>${stock.symbol}</strong> – ${stock.company_name}<br>
                 Price: ${data.price}<br>
                 Date: ${data.timestamp}
@@ -207,10 +198,9 @@ function loadLivePrices() {
 }
 
 
-
-
+// Run when page loads
 window.onload = function () {
   loadStocks();
-  loadWatchlist(); 
-  loadLivePrices(); 
+  loadWatchlist();
+  loadLivePrices(); // Uncomment when needed manually
 };

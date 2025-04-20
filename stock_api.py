@@ -20,6 +20,7 @@ def fetch_stock_data(symbol, function='TIME_SERIES_DAILY'):
     # Make GET request to Alpha Vantage API
     response = requests.get(BASE_URL, params=params)
     data = response.json()
+    print(data)
 
     # Validate response contains daily time series
     if 'Time Series (Daily)' not in data:
@@ -37,5 +38,6 @@ def fetch_stock_data(symbol, function='TIME_SERIES_DAILY'):
     }
 
 # References: Alpha Vantage docs, Omi.me tutorial, Real Python, Medium (see README)
+
 
 
