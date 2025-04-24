@@ -106,12 +106,15 @@ function loadWatchlist() {
               <strong>${item.symbol}</strong> - ${item.company_name}
             </div>
             <div>
-              <span class="badge bg-secondary">Watchlist</span>
+              <button class="btn btn-sm btn-danger" onclick="removeFromWatchlist(${item.id})">
+                Remove
+              </button>
             </div>
           </div>
         `;
         container.innerHTML += watchlistCard;
       });
+      
     })
     .catch(err => console.error('Error loading watchlist:', err));
 }
@@ -135,6 +138,23 @@ function addToWatchlist(stockId) {
 }
 
 
+// Remove from watchlist 
+function removeFromWatchlist(watchlistId) {
+  if (!confirm('Remove this stock from your watchlist?')) return;
+
+  fetch(`/api/watchlist/${watchlistId}`, {
+    method: 'DELETE'
+  })
+    .then(res => res.json())
+    .then(data => {
+      alert(data.message);
+      loadWatchlist();
+    })
+    .catch(err => console.error('Error removing from watchlist:', err));
+}
+
+
+
 // Update a stock's company name
 function updateStock(stockId) {
   const newName = prompt("Enter new company name:");
@@ -154,24 +174,26 @@ function updateStock(stockId) {
 }
 
 
-// Delete a stock
+// Delete a stock with confirmation
 function deleteStock(stockId) {
-  if (!confirm('Are you sure you want to delete this stock?')) return;
+  const confirmDelete = confirm("⚠️ Are you sure you want to permanently delete this stock?");
+  if (!confirmDelete) return;
 
   fetch(`/api/stocks/${stockId}`, {
     method: 'DELETE'
   })
-  .then(res => res.json())
-  .then(data => {
-    alert(data.message);
-    loadStocks();
-    loadWatchlist();
-  })
-  .catch(err => console.error('Error deleting:', err));
+    .then(res => res.json())
+    .then(data => {
+      alert(data.message);
+      loadStocks();
+      loadWatchlist();
+    })
+    .catch(err => console.error('Error deleting:', err));
 }
 
 
-// Fetch live prices for all stocks
+
+// Fetch  prices for all stocks
 function loadLivePrices() {
   fetch('/api/stocks/')
     .then(response => response.json())

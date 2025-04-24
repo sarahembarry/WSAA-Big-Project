@@ -11,6 +11,12 @@ stock_routes = Blueprint('stock_routes', __name__)
 @stock_routes.route('/', methods=['POST'])
 def add_stock():
     data = request.get_json()
+
+     # Prevent duplicates
+    exists = Stock.query.filter_by(symbol=data['symbol'].upper()).first()
+    if exists:
+        return jsonify({'message': 'Stock already exists'}), 400
+    
     stock = Stock(
         symbol=data['symbol'].upper(),
         company_name=data['company_name']
