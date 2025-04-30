@@ -26,11 +26,18 @@ class Watchlist(db.Model):
     stock_id = db.Column(db.Integer, db.ForeignKey('stock.id'), nullable=False)
     personal_note = db.Column(db.String(250))
 
-    # Return Watchlist entry as a Python dictionary
+    # Snapshot fields
+    snapshot_price = db.Column(db.Float, nullable=True)
+    snapshot_date = db.Column(db.String(10), nullable=True) 
+
+  
+
     def to_dict(self):
         return {
             "id": self.id,
             "stock_id": self.stock_id,
             "symbol": self.stock.symbol,
             "company_name": self.stock.company_name,
+            "snapshot_price": self.snapshot_price,
+            "snapshot_date": self.snapshot_date,
         }

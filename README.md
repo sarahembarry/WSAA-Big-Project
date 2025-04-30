@@ -53,6 +53,8 @@
 | JavaScript Confirm Delete | [SitePoint – Confirm Before Delete](https://www.sitepoint.com/community/t/confirm-before-delete/221197) | `app.js` |
 | JavaScript Dynamic Buttons | [SitePoint – Using onclick on dynamically created button](https://www.sitepoint.com/community/t/using-onclick-on-dynamically-created-button/358755) | `app.js` |
 | JavaScript DOM & forEach | [Medium – Using forEach and innerHTML](https://medium.com/@ianflurkey/using-foreach-and-innerhtml-to-create-search-results-6b11b9985d6b) | `app.js` |
+| JavaScript Template Literals | [MDN – Template literals](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals) | `app.js` |
+| REST Methods – PUT vs PATCH | [GeeksforGeeks – Difference between PUT and PATCH](https://www.geeksforgeeks.org/difference-between-put-and-patch-request/) | `watchlist_routes.py` |
 
 | **UI – Bootstrap** |||
 | Bootstrap CDN | [Bootstrap – CDN Links](https://getbootstrap.com/docs/5.3/getting-started/introduction/#cdn-links) | `templates/index.html` |

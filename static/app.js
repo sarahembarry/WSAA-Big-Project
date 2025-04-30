@@ -103,21 +103,22 @@ function loadWatchlist() {
         const watchlistCard = `
           <div class="d-flex justify-content-between align-items-center mb-2 p-2 border rounded">
             <div>
-              <strong>${item.symbol}</strong> - ${item.company_name}
+              <strong>${item.symbol}</strong> – ${item.company_name}<br>
+              <small class="text-muted">Snapshot Price: €${item.snapshot_price} on ${item.snapshot_date}</small>
             </div>
             <div>
-              <button class="btn btn-sm btn-danger" onclick="removeFromWatchlist(${item.id})">
-                Remove
-              </button>
+              <button class="btn btn-sm btn-outline-primary me-2" onclick="refreshSnapshot(${item.id})">Refresh</button>
+              <button class="btn btn-sm btn-outline-danger" onclick="removeFromWatchlist(${item.id})">Remove</button>
             </div>
           </div>
         `;
         container.innerHTML += watchlistCard;
       });
-      
     })
     .catch(err => console.error('Error loading watchlist:', err));
 }
+
+
 
 
 // Add stock to watchlist by ID (via POST /api/watchlist)
@@ -218,6 +219,29 @@ function loadLivePrices() {
       });
     });
 }
+
+
+function refreshSnapshot(watchlistId) {
+  fetch(`/api/watchlist/${watchlistId}/refresh`, {
+    method: 'PUT'
+  })
+  .then(res => res.json())
+  .then(data => {
+    alert(data.message);
+    loadWatchlist(); // Reload updated data
+  })
+  .catch(err => console.error('Error refreshing snapshot:', err));
+}
+
+
+
+
+
+
+
+
+
+
 
 
 // Run when page loads

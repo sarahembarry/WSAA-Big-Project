@@ -3,6 +3,7 @@
 
 from flask import Blueprint, request, jsonify
 from models import db, Watchlist, Stock
+from stock_api import fetch_stock_data 
 
 # Create Blueprint for watchlist routes
 watchlist_routes = Blueprint('watchlist_routes', __name__)
@@ -14,13 +15,24 @@ def add_to_watchlist():
     stock = Stock.query.get(data['stock_id'])  # Check if stock exists
     if not stock:
         return jsonify({'error': 'Stock not found'}), 404
-
+    # Check for duplicates
+    existing = Watchlist.query.filter_by(stock_id=stock.id).first()
+    if existing:
+        return jsonify({'message': 'Stock already in watchlist'}), 400
+    # Get snapshot price + date
+    snapshot = fetch_stock_data(stock.symbol)
+    price = snapshot.get('price')
+    date = snapshot.get('timestamp')
+    
+    # Create new watchlist item with snapshot data
     item = Watchlist(
-        stock_id=data['stock_id'],
+        stock_id=stock.id,
+        snapshot_price=price,
+        snapshot_date=date
     )
-    db.session.add(item)  # Add to DB
-    db.session.commit()   # Save changes
-    return jsonify({'message': 'Added to watchlist'})
+    db.session.add(item)       
+    db.session.commit()        
+    return jsonify({'message': 'Added to watchlist with snapshot'})
 
 # Route: Get all watchlist items (GET)
 @watchlist_routes.route('/', methods=['GET'])
@@ -36,3 +48,24 @@ def delete_watchlist_item(id):
     db.session.delete(item)  # Delete item
     db.session.commit()  # Save changes
     return jsonify({'message': 'Removed from watchlist'})  # Return message
+
+
+# Route: Refresh snapshot for a watchlist item (PUT)
+@watchlist_routes.route('/<int:id>/refresh', methods=['PUT'])
+def refresh_snapshot(id):
+    item = Watchlist.query.get_or_404(id)
+    stock = item.stock  # Get associated Stock
+
+    snapshot = fetch_stock_data(stock.symbol)
+    price = snapshot.get('price')
+    date = snapshot.get('timestamp')
+
+    if price is None or date is None:
+        return jsonify({'error': 'Failed to refresh snapshot'}), 502
+
+    item.snapshot_price = price
+    item.snapshot_date = date
+    db.session.commit()
+
+    return jsonify({'message': 'Snapshot refreshed'})
+
