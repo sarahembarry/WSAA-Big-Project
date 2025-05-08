@@ -38,6 +38,3 @@ def fetch_stock_data(symbol, function='TIME_SERIES_DAILY'):
     }
 
 # References: Alpha Vantage docs, Omi.me tutorial, Real Python, Medium (see README)
-
-
-

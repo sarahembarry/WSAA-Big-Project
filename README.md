@@ -45,24 +45,31 @@
 | SQLAlchemy Tutorial | [DigitalOcean – SQLAlchemy in Flask](https://www.digitalocean.com/community/tutorials/how-to-use-flask-sqlalchemy-to-interact-with-databases-in-a-flask-application) | `models.py`, `stock_routes.py`, `watchlist_routes.py`, `app.py` |
 
 | **JavaScript & UI Logic** |||
-| JavaScript DOM – getElementById | [MDN – Document.getElementById](https://developer.mozilla.org/en-US/docs/Web/API/Document/getElementById) | `app.js` |
-| JavaScript – alert() | [MDN – Window.alert()](https://developer.mozilla.org/en-US/docs/Web/API/Window/alert) | `app.js` |
-| JavaScript – preventDefault() | [W3Schools – event.preventDefault()](https://www.w3schools.com/jsref/event_preventdefault.asp) | `app.js` |
-| JavaScript – Fetch API | [MDN – Fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch) | `app.js` |
-| JavaScript – response.json() | [MDN – Response.json()](https://developer.mozilla.org/en-US/docs/Web/API/Response/json) | `app.js` |
-| JavaScript Confirm Delete | [SitePoint – Confirm Before Delete](https://www.sitepoint.com/community/t/confirm-before-delete/221197) | `app.js` |
-| JavaScript Dynamic Buttons | [SitePoint – Using onclick on dynamically created button](https://www.sitepoint.com/community/t/using-onclick-on-dynamically-created-button/358755) | `app.js` |
-| JavaScript DOM & forEach | [Medium – Using forEach and innerHTML](https://medium.com/@ianflurkey/using-foreach-and-innerhtml-to-create-search-results-6b11b9985d6b) | `app.js` |
-| JavaScript Template Literals | [MDN – Template literals](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals) | `app.js` |
-| REST Methods – PUT vs PATCH | [GeeksforGeeks – Difference between PUT and PATCH](https://www.geeksforgeeks.org/difference-between-put-and-patch-request/) | `watchlist_routes.py` |
+| JavaScript DOM – getElementById   | [MDN – Document.getElementById](https://developer.mozilla.org/en-US/docs/Web/API/Document/getElementById)                                                         | `app.js`              |
+| JavaScript – alert()              | [MDN – Window.alert()](https://developer.mozilla.org/en-US/docs/Web/API/Window/alert)                                                                             | `app.js`              |
+| JavaScript – preventDefault()     | [W3Schools – event.preventDefault()](https://www.w3schools.com/jsref/event_preventdefault.asp)                                                                    | `app.js`              |
+| JavaScript – Fetch API            | [MDN – Fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch)                                                                         | `app.js`              |
+| JavaScript – response.json()      | [MDN – Response.json()](https://developer.mozilla.org/en-US/docs/Web/API/Response/json)                                                                           | `app.js`              |
+| JavaScript Confirm Delete         | [SitePoint – Confirm Before Delete](https://www.sitepoint.com/community/t/confirm-before-delete/221197)                                                           | `app.js`              |
+| JavaScript Dynamic Buttons        | [SitePoint – Using onclick on dynamically created button](https://www.sitepoint.com/community/t/using-onclick-on-dynamically-created-button/358755)               | `app.js`              |
+| JavaScript DOM & forEach          | [Medium – Using forEach and innerHTML](https://medium.com/@ianflurkey/using-foreach-and-innerhtml-to-create-search-results-6b11b9985d6b)                          | `app.js`              |
+| JavaScript Template Literals      | [MDN – Template literals](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals)                                                    | `app.js`              |
+| REST Methods – PUT vs PATCH       | [GeeksforGeeks – Difference between PUT and PATCH](https://www.geeksforgeeks.org/difference-between-put-and-patch-request/)                                       | `watchlist_routes.py` |
+| JavaScript – createElement()      | [MDN – Document.createElement](https://developer.mozilla.org/en-US/docs/Web/API/Document/createElement)                                                           | `app.js`              |
+| JavaScript – appendChild()        | [MDN – Node.appendChild](https://developer.mozilla.org/en-US/docs/Web/API/Node/appendChild)                                                                       | `app.js`              |
+| CSS Positioning                   | [MDN – position](https://developer.mozilla.org/en-US/docs/Web/CSS/position)                                                                                       | `popup styling`       |
+| JavaScript – Clear Form on Submit | [GeeksforGeeks – Clear Form after Submit](https://www.geeksforgeeks.org/how-to-clear-form-after-submit-in-javascript-without-using-reset/?utm_source=chatgpt.com) | `app.js`              |
+| JavaScript – Form Validation      | [MDN – Form validation](https://developer.mozilla.org/en-US/docs/Learn_web_development/Extensions/Forms/Form_validation?utm_source=chatgpt.com)                   | `app.js`              |
+| JavaScript – Fetch Error Handling | [Dev.to – Fetch API error handling](https://dev.to/dionarodrigues/fetch-api-do-you-really-know-how-to-handle-errors-2gj0?)                                        | `app.js`              |
 
 | **UI – Bootstrap** |||
-| Bootstrap CDN | [Bootstrap – CDN Links](https://getbootstrap.com/docs/5.3/getting-started/introduction/#cdn-links) | `templates/index.html` |
-| Bootstrap Containers | [Bootstrap – Layout Containers](https://getbootstrap.com/docs/5.3/layout/containers/) | `templates/index.html` |
-| Bootstrap Cards | [Bootstrap – Components: Card](https://getbootstrap.com/docs/5.3/components/card/) | `templates/index.html` |
-| Bootstrap Buttons | [W3Schools – Bootstrap Buttons](https://www.w3schools.com/bootstrap/bootstrap_buttons.asp) | `templates/index.html` |
-| Bootstrap Flex | [W3Schools – Bootstrap 4 Flex](https://www.w3schools.com/bootstrap4/bootstrap_flex.asp) | `templates/index.html` |
-| Bootstrap Input Groups | [Bootstrap – Forms: Input Group](https://getbootstrap.com/docs/5.3/forms/input-group/) | `templates/index.html` |
+| Bootstrap CDN          | [Bootstrap – CDN Links](https://getbootstrap.com/docs/5.3/getting-started/introduction/#cdn-links) | `templates/index.html` |
+| Bootstrap Containers   | [Bootstrap – Layout Containers](https://getbootstrap.com/docs/5.3/layout/containers/)              | `templates/index.html` |
+| Bootstrap Cards        | [Bootstrap – Components: Card](https://getbootstrap.com/docs/5.3/components/card/)                 | `templates/index.html` |
+| Bootstrap Buttons      | [W3Schools – Bootstrap Buttons](https://www.w3schools.com/bootstrap/bootstrap_buttons.asp)         | `templates/index.html` |
+| Bootstrap Flex         | [W3Schools – Bootstrap 4 Flex](https://www.w3schools.com/bootstrap4/bootstrap_flex.asp)            | `templates/index.html` |
+| Bootstrap Input Groups | [Bootstrap – Forms: Input Group](https://getbootstrap.com/docs/5.3/forms/input-group/)             | `templates/index.html` |
+| Bootstrap Spinners     | [Bootstrap – Spinners](https://getbootstrap.com/docs/4.4/components/spinners/)                     | `app.js`               |
 
 | **Other Tools & Practices** |||
 | Virtual Environments | [Python Docs – venv](https://docs.python.org/3/library/venv.html) | `venv/`, `.gitignore` |

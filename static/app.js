@@ -4,14 +4,65 @@
 // Combined Search + Add to Stocks
 // Search for live stock data by symbol, show result, allow entering company name, then add it
 
-document.getElementById('searchAddStockForm').addEventListener('submit', function (e) {
+
+function showPopup(message, type = 'info') {
+  const popup = document.createElement('div');
+  popup.className = `custom-popup alert alert-${type}`;
+  popup.textContent = message;
+  document.body.appendChild(popup);
+  setTimeout(() => popup.remove(), 3000);
+}
+
+// Inject CSS for popup if not present
+if (!document.getElementById('popup-style')) {
+  const style = document.createElement('style');
+  style.id = 'popup-style';
+  style.innerHTML = `
+    .custom-popup {
+      position: fixed;
+      bottom: 1.5rem;
+      right: 1.5rem;
+      z-index: 1055;
+      padding: 1rem 1.5rem;
+      border-radius: 0.5rem;
+      box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.15);
+      font-weight: 500;
+      opacity: 0.95;
+    }
+  `;
+  document.head.appendChild(style);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+document.getElementById('searchAddStockForm').addEventListener('submit', handleSearchAddFormSubmit);
+
+function handleSearchAddFormSubmit(e) {
   e.preventDefault();
-  const symbol = document.getElementById('searchSymbolCombined').value;
+  const symbol = document.getElementById('searchSymbolCombined').value.trim().toUpperCase();
+  const resultDiv = document.getElementById('searchAddResult');
+  const submitBtn = e.target.querySelector('button[type="submit"]');
+
+  
+  resultDiv.innerHTML = '';
+  submitBtn.disabled = true;
+  submitBtn.innerHTML = `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...`;
 
   fetch(`/api/live/${symbol}`)
     .then(res => res.json())
     .then(data => {
-      const resultDiv = document.getElementById('searchAddResult');
+      submitBtn.disabled = false;
+      submitBtn.innerHTML = `Get Stock Data`;
 
       if (data.error) {
         resultDiv.innerHTML = `<div class="alert alert-danger mt-2">${data.error}</div>`;
@@ -19,28 +70,32 @@ document.getElementById('searchAddStockForm').addEventListener('submit', functio
       }
 
       resultDiv.innerHTML = `
-        <div class="alert alert-info mt-2">
-          <strong>${symbol.toUpperCase()}</strong><br>
-          Price: ${data.price}<br>
+        <div class="alert alert-info fade show mt-2" role="alert">
+          <strong>${symbol}</strong><br>
+          Price: $${data.price}<br>
           Date: ${data.timestamp}
         </div>
         <input type="text" id="companyNameCombined" class="form-control mb-2 mt-2" placeholder="Enter Company Name" required>
-        <button class="btn btn-primary" onclick="addStockFromSearch('${symbol.toUpperCase()}')">Add to Stocks</button>
+        <button class="btn btn-primary" onclick="addStockFromSearch('${symbol}')">Add to Stocks</button>
       `;
     })
     .catch(err => {
       console.error('Error:', err);
-      document.getElementById('searchAddResult').innerHTML =
-        `<div class="alert alert-danger mt-2">Error fetching stock data.</div>`;
+      
+      resultDiv.innerHTML = `<div class="alert alert-danger mt-2" role="alert">Error fetching stock data. Please try again.</div>`;
     });
-});
+}
 
 
-// Add stock using symbol + user-provided company name
+
+
 function addStockFromSearch(symbol) {
   const companyName = document.getElementById('companyNameCombined').value;
+  const messageDiv = document.getElementById('stockMessage');
+  messageDiv.innerHTML = '';  
+
   if (!companyName) {
-    alert('Please enter a company name.');
+    messageDiv.innerHTML = `<div class="alert alert-warning">Please enter a company name.</div>`;
     return;
   }
 
@@ -51,11 +106,21 @@ function addStockFromSearch(symbol) {
   })
   .then(res => res.json())
   .then(data => {
-    alert(data.message);
-    loadStocks();
+    if (data.error) {
+      messageDiv.innerHTML = `<div class="alert alert-danger">${data.error}</div>`;
+    } else {
+      messageDiv.innerHTML = `<div class="alert alert-success">${data.message}</div>`;
+      document.getElementById('companyNameCombined').value = '';
+      loadStocks();
+    }
   })
-  .catch(err => console.error('Error adding stock:', err));
+  .catch(err => {
+    console.error('Error adding stock:', err);
+    messageDiv.innerHTML = `<div class="alert alert-danger">Something went wrong. Please try again.</div>`;
+  });
 }
+
+
 
 
 // Load all stocks and display them with action buttons
@@ -65,6 +130,11 @@ function loadStocks() {
     .then(data => {
       const container = document.getElementById('stocksContainer');
       container.innerHTML = '';
+
+      if (data.length === 0) {
+        container.innerHTML = '<div class="text-muted">No stocks added.</div>';
+        return;
+      }
 
       data.forEach(stock => {
         const stockCard = `
@@ -86,6 +156,7 @@ function loadStocks() {
 }
 
 
+
 // Load all watchlist items
 function loadWatchlist() {
   fetch('/api/watchlist/')
@@ -104,11 +175,11 @@ function loadWatchlist() {
           <div class="d-flex justify-content-between align-items-center mb-2 p-2 border rounded">
             <div>
               <strong>${item.symbol}</strong> – ${item.company_name}<br>
-              <small class="text-muted">Snapshot Price: €${item.snapshot_price} on ${item.snapshot_date}</small>
+              <small class="text-muted">Snapshot Price: $${item.snapshot_price} on ${item.snapshot_date}</small>
             </div>
             <div>
-              <button class="btn btn-sm btn-outline-primary me-2" onclick="refreshSnapshot(${item.id})">Refresh</button>
-              <button class="btn btn-sm btn-outline-danger" onclick="removeFromWatchlist(${item.id})">Remove</button>
+              <button class="btn btn-sm btn-success me-2" onclick="refreshSnapshot(${item.id})">Refresh</button>
+              <button class="btn btn-sm btn-danger" onclick="removeFromWatchlist(${item.id})">Remove</button>
             </div>
           </div>
         `;
@@ -117,6 +188,7 @@ function loadWatchlist() {
     })
     .catch(err => console.error('Error loading watchlist:', err));
 }
+
 
 
 
@@ -132,11 +204,18 @@ function addToWatchlist(stockId) {
   })
   .then(response => response.json())
   .then(data => {
-    alert(data.message);
+    showPopup(data.message, data.message.includes('already') ? 'warning' : 'success');
     loadWatchlist();
   })
-  .catch(err => console.error('Error:', err));
+  .catch(err => {
+    console.error('Error:', err);
+    showPopup('Error adding to watchlist.', 'danger');
+  });
 }
+
+
+
+
 
 
 // Remove from watchlist 
@@ -225,13 +304,23 @@ function refreshSnapshot(watchlistId) {
   fetch(`/api/watchlist/${watchlistId}/refresh`, {
     method: 'PUT'
   })
-  .then(res => res.json())
-  .then(data => {
-    alert(data.message);
-    loadWatchlist(); // Reload updated data
-  })
-  .catch(err => console.error('Error refreshing snapshot:', err));
+    .then(res => res.json())
+    .then(data => {
+      if (data.error) {
+        alert(`Error: ${data.error}`);
+        return;
+      }
+
+      alert(data.message);
+      loadWatchlist(); // Reload updated data
+    })
+    .catch(err => {
+      console.error('Error refreshing snapshot:', err);
+      alert('An error occurred while refreshing the snapshot.');
+    });
 }
+
+
 
 
 

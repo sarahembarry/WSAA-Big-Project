@@ -57,15 +57,20 @@ def refresh_snapshot(id):
     stock = item.stock  # Get associated Stock
 
     snapshot = fetch_stock_data(stock.symbol)
+
+    if 'error' in snapshot:
+        return jsonify({'error': snapshot['error']}), 400
+
     price = snapshot.get('price')
     date = snapshot.get('timestamp')
 
     if price is None or date is None:
-        return jsonify({'error': 'Failed to refresh snapshot'}), 502
+        return jsonify({'error': 'Incomplete snapshot data'}), 502
 
     item.snapshot_price = price
     item.snapshot_date = date
     db.session.commit()
 
     return jsonify({'message': 'Snapshot refreshed'})
+
 

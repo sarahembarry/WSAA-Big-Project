@@ -17,20 +17,26 @@
   <main class="container py-4">
     <h1 class="text-center mb-4">Stock Tracker</h1>
 
-    <!-- Card: Search and Add Stock -->
-    <section>
-      <h2 class="visually-hidden">Search and Add Stock</h2>
-      <div class="card mb-4">
-        <div class="card-header">Search & Add Stock</div>
-        <div class="card-body">
-          <form id="searchAddStockForm">
-            <input type="text" id="searchSymbolCombined" class="form-control mb-2" placeholder="Enter Stock Symbol (e.g., AAPL)" required>
-            <button class="btn btn-success" type="submit">Get Stock Data</button>
-          </form>
-          <div id="searchAddResult" class="mt-3"></div>
-        </div>
-      </div>
-    </section>
+<!-- Card: Search and Add Stock -->
+<section>
+  <h2 class="visually-hidden">Search and Add Stock</h2>
+  <div class="card mb-4">
+    <div class="card-header">Search & Add Stock</div>
+    <div class="card-body">
+      <form id="searchAddStockForm">
+        <input type="text" id="searchSymbolCombined" class="form-control mb-2" placeholder="Enter Stock Symbol (e.g., AAPL)" required>
+        <button class="btn btn-success" type="submit">Get Stock Data</button>
+      </form>
+
+    
+      <div id="stockMessage" class="mt-3"></div>
+
+     
+      <div id="searchAddResult" class="mt-3"></div>
+    </div>
+  </div>
+</section>
+
 
     <!-- Card: Live Prices -->
     <section>
@@ -49,6 +55,8 @@
       <div class="card mb-4">
         <div class="card-header">Watchlist</div>
         <div class="card-body" id="watchlistContainer">
+          <div id="watchlistMessage" class="mb-2"></div>
+
           <!-- Watchlist items will be inserted here -->
         </div>
       </div>
