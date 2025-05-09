@@ -219,57 +219,96 @@ function addToWatchlist(stockId) {
 
 
 // Remove from watchlist 
-function removeFromWatchlist(watchlistId) {
-  if (!confirm('Remove this stock from your watchlist?')) return;
 
-  fetch(`/api/watchlist/${watchlistId}`, {
+
+function removeFromWatchlist(watchlistId) {
+  watchlistToRemove = watchlistId;
+  const modal = new bootstrap.Modal(document.getElementById('confirmRemoveModal'));
+  modal.show();
+}
+
+document.getElementById('confirmRemoveBtn').addEventListener('click', () => {
+  if (!watchlistToRemove) return;
+
+  fetch(`/api/watchlist/${watchlistToRemove}`, {
     method: 'DELETE'
   })
     .then(res => res.json())
     .then(data => {
-      alert(data.message);
+      showPopup(data.message, 'success');
       loadWatchlist();
     })
-    .catch(err => console.error('Error removing from watchlist:', err));
-}
+    .catch(err => {
+      console.error('Error removing from watchlist:', err);
+      showPopup('Error removing from watchlist.', 'danger');
+    })
+    .finally(() => {
+      bootstrap.Modal.getInstance(document.getElementById('confirmRemoveModal')).hide();
+      watchlistToRemove = null;
+    });
+});
+
 
 
 
 // Update a stock's company name
 function updateStock(stockId) {
-  const newName = prompt("Enter new company name:");
-  if (!newName) return;
+  stockToUpdate = stockId;
+  const modal = new bootstrap.Modal(document.getElementById('updateStockModal'));
+  modal.show();
+}
 
-  fetch(`/api/stocks/${stockId}`, {
+document.getElementById('confirmUpdateBtn').addEventListener('click', function () {
+  const newName = document.getElementById('updateCompanyNameInput').value.trim();
+  if (!newName) {
+    showPopup('Please enter a valid company name.', 'warning');
+    return;
+  }
+
+  fetch(`/api/stocks/${stockToUpdate}`, {
     method: 'PUT',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ company_name: newName })
   })
   .then(res => res.json())
   .then(data => {
-    alert(data.message);
+    const modal = bootstrap.Modal.getInstance(document.getElementById('updateStockModal'));
+    modal.hide();
+    showPopup(data.message, 'success');
     loadStocks();
   })
-  .catch(err => console.error('Error updating:', err));
+  .catch(err => {
+    console.error('Error updating stock:', err);
+    showPopup('Error updating stock.', 'danger');
+  });
+});
+
+
+//delete stock
+function deleteStock(stockId) {
+  stockToDelete = stockId;
+  const modal = new bootstrap.Modal(document.getElementById('confirmStockDeleteModal'));
+  modal.show();
 }
 
-
-// Delete a stock with confirmation
-function deleteStock(stockId) {
-  const confirmDelete = confirm("⚠️ Are you sure you want to permanently delete this stock?");
-  if (!confirmDelete) return;
-
-  fetch(`/api/stocks/${stockId}`, {
+document.getElementById('confirmStockDeleteBtn').addEventListener('click', function () {
+  fetch(`/api/stocks/${stockToDelete}`, {
     method: 'DELETE'
   })
     .then(res => res.json())
     .then(data => {
-      alert(data.message);
+      const modal = bootstrap.Modal.getInstance(document.getElementById('confirmStockDeleteModal'));
+      modal.hide();
+      showPopup(data.message, 'success');
       loadStocks();
       loadWatchlist();
     })
-    .catch(err => console.error('Error deleting:', err));
-}
+    .catch(err => {
+      console.error('Error deleting stock:', err);
+      showPopup('Error deleting stock.', 'danger');
+    });
+});
+
 
 
 
@@ -300,6 +339,7 @@ function loadLivePrices() {
 }
 
 
+// Refresh snapshot for a watchlist item
 function refreshSnapshot(watchlistId) {
   fetch(`/api/watchlist/${watchlistId}/refresh`, {
     method: 'PUT'
@@ -307,18 +347,19 @@ function refreshSnapshot(watchlistId) {
     .then(res => res.json())
     .then(data => {
       if (data.error) {
-        alert(`Error: ${data.error}`);
+        showPopup(`Error: ${data.error}`, 'danger');
         return;
       }
 
-      alert(data.message);
+      showPopup(data.message, 'success');
       loadWatchlist(); // Reload updated data
     })
     .catch(err => {
       console.error('Error refreshing snapshot:', err);
-      alert('An error occurred while refreshing the snapshot.');
+      showPopup('An error occurred while refreshing the snapshot.', 'danger');
     });
 }
+
 
 
 
