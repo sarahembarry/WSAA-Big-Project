@@ -11,6 +11,8 @@
   <title>Stock Tracker</title>
   <!-- Bootstrap CSS from CDN -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 </head>
 
 <body class="bg-light">
@@ -23,6 +25,9 @@
   <div class="card mb-4">
     <div class="card-header">Search & Add Stock</div>
     <div class="card-body">
+      <small class="text-muted d-block mb-2">Enter a stock symbol (e.g., AAPL) to get the latest data and a 30-day chart.</small>
+      <form id="searchAddStockForm">
+    
       <form id="searchAddStockForm">
         <input type="text" id="searchSymbolCombined" class="form-control mb-2" placeholder="Enter Stock Symbol (e.g., AAPL)" required>
         <button class="btn btn-success" type="submit">Get Stock Data</button>
@@ -38,41 +43,62 @@
 </section>
 
 
-    <!-- Card: Live Prices -->
-    <section>
-      <h2 class="visually-hidden">Yesterday's closing prices</h2>
-      <div class="card mb-4">
-        <div class="card-header">Yesterday's closing prices</div>
-        <div class="card-body" id="livePricesContainer">
-          <!-- Live prices will appear here -->
-        </div>
-      </div>
-    </section>
 
-    <!-- Card: Watchlist -->
-    <section>
-      <h2 class="visually-hidden">Watchlist</h2>
-      <div class="card mb-4">
-        <div class="card-header">Watchlist</div>
-        <div class="card-body" id="watchlistContainer">
-          <div id="watchlistMessage" class="mb-2"></div>
 
-          <!-- Watchlist items will be inserted here -->
-        </div>
-      </div>
-    </section>
 
-    <!-- Card: All Stocks -->
-    <section>
-      <h2 class="visually-hidden">All Stocks</h2>
-      <div class="card mb-4">
-        <div class="card-header">All Stocks</div>
-        <div class="card-body" id="stocksContainer">
-          <!-- JavaScript will fill this in -->
-        </div>
+<!-- Card: Live Prices -->
+<section>
+  <h2 class="visually-hidden">Last closing prices</h2>
+  <div class="card mb-4">
+    <div class="card-header">Last closing prices</div>
+    <div class="card-body">
+      <small class="text-muted d-block mb-2">
+        This shows the last market close for all tracked stocks.
+      </small>
+      <div id="livePricesContainer">
+        <!-- Live prices will appear here -->
       </div>
-    </section>
-  </main>
+    </div>
+  </div>
+</section>
+
+
+<!-- Card: Watchlist -->
+<section>
+  <h2 class="visually-hidden">Watchlist</h2>
+  <div class="card mb-4">
+    <div class="card-header">Watchlist</div>
+    <div class="card-body">
+      <small class="text-muted d-block mb-2">
+        Click "Refresh" to update prices, or "Remove" to delete an item.
+      </small>
+      <div id="watchlistMessage" class="mb-2"></div>
+      <div id="watchlistContainer">
+        <!-- Watchlist items will be inserted here -->
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+
+<!-- Card: All Stocks -->
+<section>
+  <h2 class="visually-hidden">All Stocks</h2>
+  <div class="card mb-4">
+    <div class="card-header">All Stocks</div>
+    <div class="card-body">
+      <small class="text-muted d-block mb-2">
+        Use the buttons to add to your watchlist, update company names, or delete stocks.
+      </small>
+      <div id="stocksContainer">
+        
+      </div>
+    </div>
+  </div>
+</section>
+
 
 
   <!-- Confirm Remove Modal -->
@@ -106,6 +132,8 @@
       <div class="modal-body">
         <input type="text" id="updateCompanyNameInput" class="form-control" placeholder="Enter new company name">
       </div>
+      
+
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
         <button id="confirmUpdateBtn" type="button" class="btn btn-warning">Update</button>
@@ -139,9 +167,13 @@
 
   <!-- JavaScript file for handling API requests -->
   <script src="/static/app.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
+
+
 
 
 </html>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js"></script>
+

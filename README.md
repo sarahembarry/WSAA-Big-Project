@@ -2,7 +2,9 @@
 
 ## Table of Contents:
 1. [Assignment Description](#assignment-description)
-2. [References](#references)
+2. [Live demo on Render] (#live-demo-on-render)
+3. [References](#references)
+
 
 
 ## Assignment Description
@@ -58,9 +60,16 @@
 | JavaScript – createElement()      | [MDN – Document.createElement](https://developer.mozilla.org/en-US/docs/Web/API/Document/createElement)                                                           | `app.js`              |
 | JavaScript – appendChild()        | [MDN – Node.appendChild](https://developer.mozilla.org/en-US/docs/Web/API/Node/appendChild)                                                                       | `app.js`              |
 | CSS Positioning                   | [MDN – position](https://developer.mozilla.org/en-US/docs/Web/CSS/position)                                                                                       | `popup styling`       |
-| JavaScript – Clear Form on Submit | [GeeksforGeeks – Clear Form after Submit](https://www.geeksforgeeks.org/how-to-clear-form-after-submit-in-javascript-without-using-reset/?utm_source=chatgpt.com) | `app.js`              |
-| JavaScript – Form Validation      | [MDN – Form validation](https://developer.mozilla.org/en-US/docs/Learn_web_development/Extensions/Forms/Form_validation?utm_source=chatgpt.com)                   | `app.js`              |
+| JavaScript – Clear Form on Submit | [GeeksforGeeks – Clear Form after Submit](https://www.geeksforgeeks.org/how-to-clear-form-after-submit-in-javascript-without-using-reset/) | `app.js`              |
+| JavaScript – Form Validation      | [MDN – Form validation](https://developer.mozilla.org/en-US/docs/Learn_web_development/Extensions/Forms/Form_validation)                   | `app.js`              |
 | JavaScript – Fetch Error Handling | [Dev.to – Fetch API error handling](https://dev.to/dionarodrigues/fetch-api-do-you-really-know-how-to-handle-errors-2gj0?)                                        | `app.js`              |
+| JavaScript – String.toUpperCase()     | [MDN – String.toUpperCase()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/toUpperCase) | `app.js` |
+| JavaScript – String.trim()            | [MDN – String.trim()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/trim)               | `app.js` |
+| JavaScript – HTMLButtonElement.disabled | [MDN – HTMLButtonElement.disabled](https://developer.mozilla.org/en-US/docs/Web/API/HTMLButtonElement/disabled)                  | `app.js` |
+| Chart.js – getChart API               | [Chart.js – getChart()](https://www.chartjs.org/docs/latest/developers/api.html#getchart)                                         | `app.js` |
+| Chart.js – Line Chart                 | [Chart.js – Line Chart](https://www.chartjs.org/docs/latest/charts/line.html)                                                     | `app.js` |
+| Chart.js – Main Docs                  | [Chart.js – Documentation](https://www.chartjs.org/docs/latest/)                                                                  | `app.js` |
+| JSON.stringify for Debug Output | [MDN – JSON.stringify()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify)                 | `app.js`                 |
 
 | **UI – Bootstrap** |||
 | Bootstrap CDN          | [Bootstrap – CDN Links](https://getbootstrap.com/docs/5.3/getting-started/introduction/#cdn-links) | `templates/index.html` |
@@ -70,6 +79,9 @@
 | Bootstrap Flex         | [W3Schools – Bootstrap 4 Flex](https://www.w3schools.com/bootstrap4/bootstrap_flex.asp)            | `templates/index.html` |
 | Bootstrap Input Groups | [Bootstrap – Forms: Input Group](https://getbootstrap.com/docs/5.3/forms/input-group/)             | `templates/index.html` |
 | Bootstrap Spinners     | [Bootstrap – Spinners](https://getbootstrap.com/docs/4.4/components/spinners/)                     | `app.js`               |
+| Bootstrap – Modal Component           | [Bootstrap – Modal](https://getbootstrap.com/docs/5.3/components/modal/)                                                          | `index.html`, `app.js` |
+| JavaScript – addEventListener         | [MDN – EventTarget.addEventListener()](https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener)            | `app.js` |
+
 
 | **Other Tools & Practices** |||
 | Virtual Environments | [Python Docs – venv](https://docs.python.org/3/library/venv.html) | `venv/`, `.gitignore` |

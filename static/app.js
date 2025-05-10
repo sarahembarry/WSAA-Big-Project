@@ -53,11 +53,11 @@ function handleSearchAddFormSubmit(e) {
   const resultDiv = document.getElementById('searchAddResult');
   const submitBtn = e.target.querySelector('button[type="submit"]');
 
-  
   resultDiv.innerHTML = '';
   submitBtn.disabled = true;
   submitBtn.innerHTML = `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...`;
 
+  // Fetch live stock data
   fetch(`/api/live/${symbol}`)
     .then(res => res.json())
     .then(data => {
@@ -65,23 +65,74 @@ function handleSearchAddFormSubmit(e) {
       submitBtn.innerHTML = `Get Stock Data`;
 
       if (data.error) {
-        resultDiv.innerHTML = `<div class="alert alert-danger mt-2">${data.error}</div>`;
+        const debugInfo = data.debug
+          ? `<br><small class="text-muted">${JSON.stringify(data.debug)}</small>`
+          : '';
+        resultDiv.innerHTML = `<div class="alert alert-danger mt-2">${data.error}${debugInfo}</div>`;
         return;
       }
+    
 
+      // Display result info and input
       resultDiv.innerHTML = `
-        <div class="alert alert-info fade show mt-2" role="alert">
-          <strong>${symbol}</strong><br>
-          Price: $${data.price}<br>
-          Date: ${data.timestamp}
-        </div>
-        <input type="text" id="companyNameCombined" class="form-control mb-2 mt-2" placeholder="Enter Company Name" required>
-        <button class="btn btn-primary" onclick="addStockFromSearch('${symbol}')">Add to Stocks</button>
-      `;
+      <div class="alert alert-info fade show mt-2" role="alert">
+        <strong>${symbol}</strong><br>
+        Price: $${data.price}<br>
+        Date: ${data.timestamp}
+      </div>
+      <input type="text" id="companyNameCombined" class="form-control mb-2 mt-2" placeholder="Enter Company Name" required>
+      <small class="text-muted mb-2 d-block">Add a custom company name for this stock before saving.</small>
+      <button class="btn btn-primary" onclick="addStockFromSearch('${symbol}')">Add to Stocks</button>
+      <canvas id="historicalChart" class="mt-4" height="100"></canvas>
+    `;
+    
+
+      // Fetch historical data for chart
+      fetch(`/api/historical/${symbol}`)
+        .then(res => res.json())
+        .then(prices => {
+          const existingChart = Chart.getChart("historicalChart");
+          if (existingChart) existingChart.destroy(); // avoid duplicates
+
+          let canvas = document.getElementById('historicalChart');
+          if (!canvas) {
+            canvas = document.createElement('canvas');
+            canvas.id = 'historicalChart';
+            canvas.height = 100;
+            resultDiv.appendChild(canvas);
+          }
+
+          const ctx = canvas.getContext('2d');
+          new Chart(ctx, {
+            type: 'line',
+            data: {
+              labels: prices.map(p => p.date),
+              datasets: [{
+                label: `${symbol} - Last 30 Days`,
+                data: prices.map(p => p.price),
+                borderColor: 'rgba(40,167,69,1)',
+                tension: 0.2,
+                fill: false
+              }]
+            },
+            options: {
+              responsive: true,
+              scales: {
+                x: { title: { display: true, text: 'Date' } },
+                y: { title: { display: true, text: 'Price ($)' } }
+              }
+            }
+          });
+        })
+        .catch(err => {
+          console.error('Error loading chart data:', err);
+          resultDiv.innerHTML += `<div class="alert alert-warning mt-2">Unable to load chart data.</div>`;
+        });
     })
     .catch(err => {
       console.error('Error:', err);
-      
+      submitBtn.disabled = false;
+      submitBtn.innerHTML = `Get Stock Data`;
       resultDiv.innerHTML = `<div class="alert alert-danger mt-2" role="alert">Error fetching stock data. Please try again.</div>`;
     });
 }
@@ -327,7 +378,7 @@ function loadLivePrices() {
             const card = `
               <div class="border rounded p-2 mb-2 bg-light">
                 <strong>${stock.symbol}</strong> – ${stock.company_name}<br>
-                Price: ${data.price}<br>
+                Price: $${data.price}<br>
                 Date: ${data.timestamp}
               </div>
             `;
@@ -378,5 +429,5 @@ function refreshSnapshot(watchlistId) {
 window.onload = function () {
   loadStocks();
   loadWatchlist();
-  loadLivePrices(); // Uncomment when needed manually
+ loadLivePrices(); // Uncomment when needed manually
 };
