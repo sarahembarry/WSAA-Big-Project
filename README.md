@@ -122,8 +122,9 @@ The application uses Flask Blueprints to organise routes into two main modules: 
 
 ## ⚠️ API Rate Limiting
 
-Alpha Vantage allows **25 free API calls per day**.  
+- Alpha Vantage allows **25 free API calls per day**.  
 If this limit is reached, users will see a message in the app.  
+
 ---
 
 ## 🧪 Project Structure
@@ -157,10 +158,10 @@ WSAA-Big-Project/
 
 ## References
 
+
+### Flask & App Structure
 | Topic | Reference | Where Used |
 |-------|-----------|------------|
-
-| **Flask & App Structure** | | |
 | Flask App Structure | [Flask – Application Factories and Package Layout](https://flask.palletsprojects.com/en/latest/patterns/packages/) | `app.py`, `stock_routes.py`, `watchlist_routes.py` |
 | Flask Setup | [Flask – Tutorial: Application Setup](https://flask.palletsprojects.com/en/latest/tutorial/) | `app.py`, `templates`, general layout |
 | Flask Factory | [Flask – Tutorial: Application Factory](https://flask.palletsprojects.com/en/latest/tutorial/factory/) | `app.py` |
@@ -172,14 +173,18 @@ WSAA-Big-Project/
 | Flask Full App Example | [515Tech – Building a PTO App](https://www.515tech.com/post/building-a-pto-app) | `stock_routes.py`, `watchlist_routes.py` |
 | Flask HTML Rendering | [Techcrush – How to Render HTML File in Flask](https://medium.com/techcrush/how-to-render-html-file-in-flask-3fbfb16b47f6) | `app.py` |
 
-| **Python & APIs** | | |
+### Python & APIs
+| Topic | Reference | Where Used |
+|-------|-----------|------------|
 | Alpha Vantage API | [Alpha Vantage – API Documentation](https://www.alphavantage.co/documentation/) | `stock_api.py` |
 | Alpha Vantage Key Setup | [Alpha Vantage – Get API Key](https://www.alphavantage.co/support/#api-key) | `.env`, `stock_api.py` |
 | API Data Fetching | [Omi.me – Alpha Vantage Fetch Guide](https://www.omi.me/blogs/api-guides/how-to-fetch-stock-data-using-alpha-vantage-api-in-python) | `stock_api.py` |
 | Env Variables in Flask | [Real Python – Flask Environment Variables](https://realpython.com/flask-database/) | `.env`, `stock_api.py` |
 | Secure Config | [Medium – Env Vars in Python](https://medium.com/datauniverse/how-to-use-environment-variables-in-python-for-secure-configuration-12d56c7f0a8c) | `.env`, `stock_api.py` |
 
-| **SQLAlchemy ORM** | | |
+### SQLAlchemy ORM
+| Topic | Reference | Where Used |
+|-------|-----------|------------|
 | SQLAlchemy Quickstart | [Flask-SQLAlchemy – Quickstart Guide](https://flask-sqlalchemy.readthedocs.io/en/stable/quickstart/) | `models.py`, `app.py` |
 | SQLAlchemy Models | [Flask-SQLAlchemy – Models and Tables](https://flask-sqlalchemy.readthedocs.io/en/stable/models/) | `models.py` |
 | SQLAlchemy Relationships | [Flask-SQLAlchemy – Relationships](https://flask-sqlalchemy.palletsprojects.com/en/latest/models/#one-to-many-relationships) | `models.py` |
@@ -192,7 +197,9 @@ WSAA-Big-Project/
 | SQLAlchemy Filter in List | [GeeksforGeeks – SQLAlchemy filter in list](https://www.geeksforgeeks.org/sqlalchemy-filter-in-list/) | `stock_routes.py` |
 | SQLAlchemy Check Row Exists | [Stack Overflow – Flask-SQLAlchemy check if row exists](https://stackoverflow.com/questions/32938475/flask-sqlalchemy-check-if-row-exists-in-table?) | `stock_routes.py` |
 
-| **JavaScript & UI Logic** | | |
+### JavaScript & UI Logic
+| Topic | Reference | Where Used |
+|-------|-----------|------------|
 | JavaScript DOM – getElementById | [MDN – Document.getElementById](https://developer.mozilla.org/en-US/docs/Web/API/Document/getElementById) | `app.js` |
 | JavaScript – alert() | [MDN – Window.alert()](https://developer.mozilla.org/en-US/docs/Web/API/Window/alert) | `app.js` |
 | JavaScript – preventDefault() | [W3Schools – event.preventDefault()](https://www.w3schools.com/jsref/event_preventdefault.asp) | `app.js` |
@@ -217,7 +224,9 @@ WSAA-Big-Project/
 | Chart.js – Main Docs | [Chart.js – Documentation](https://www.chartjs.org/docs/latest/) | `app.js` |
 | JSON.stringify for Debug Output | [MDN – JSON.stringify()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify) | `app.js` |
 
-| **UI – Bootstrap** | | |
+### UI – Bootstrap** 
+| Topic | Reference | Where Used |
+|-------|-----------|------------|
 | Bootstrap CDN | [Bootstrap – CDN Links](https://getbootstrap.com/docs/5.3/getting-started/introduction/#cdn-links) | `templates/index.html` |
 | Bootstrap Containers | [Bootstrap – Layout Containers](https://getbootstrap.com/docs/5.3/layout/containers/) | `templates/index.html` |
 | Bootstrap Cards | [Bootstrap – Components: Card](https://getbootstrap.com/docs/5.3/components/card/) | `templates/index.html` |
@@ -228,7 +237,9 @@ WSAA-Big-Project/
 | Bootstrap – Modal Component | [Bootstrap – Modal](https://getbootstrap.com/docs/5.3/components/modal/) | `index.html`, `app.js` |
 | JavaScript – addEventListener | [MDN – EventTarget.addEventListener()](https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener) | `app.js` |
 
-| **Other Tools & Practices** | | |
+### Other Tools & Practices** 
+| Topic | Reference | Where Used |
+|-------|-----------|------------|
 | Virtual Environments | [Python Docs – venv](https://docs.python.org/3/library/venv.html) | `venv/`, `.gitignore` |
 | Virtual Environments | [Real Python – Python Virtual Environments](https://realpython.com/python-virtual-environments-a-primer/) | `venv/`, `.gitignore` |
 | Python Modules | [Python Docs – Modules](https://docs.python.org/3/tutorial/modules.html) | `app.py`, `stock_routes.py`, etc. |
