@@ -52,10 +52,13 @@ function handleSearchAddFormSubmit(e) {
   const symbol = document.getElementById('searchSymbolCombined').value.trim().toUpperCase();
   const resultDiv = document.getElementById('searchAddResult');
   const submitBtn = e.target.querySelector('button[type="submit"]');
+  const messageDiv = document.getElementById('stockMessage'); 
+  messageDiv.innerHTML = '';  
 
   resultDiv.innerHTML = '';
   submitBtn.disabled = true;
   submitBtn.innerHTML = `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...`;
+
 
   // Fetch live stock data
   fetch(`/api/live/${symbol}`)
@@ -141,35 +144,43 @@ function handleSearchAddFormSubmit(e) {
 
 
 function addStockFromSearch(symbol) {
-  const companyName = document.getElementById('companyNameCombined').value;
-  const messageDiv = document.getElementById('stockMessage');
-  messageDiv.innerHTML = '';  
+  const companyNameInput = document.getElementById('companyNameCombined');
+  const resultDiv = document.getElementById('searchAddResult');
 
-  if (!companyName) {
-    messageDiv.innerHTML = `<div class="alert alert-warning">Please enter a company name.</div>`;
+  // Remove any previous warning
+  const existingAlert = document.getElementById('companyNameWarning');
+  if (existingAlert) existingAlert.remove();
+
+  if (!companyNameInput.value.trim()) {
+    const warning = document.createElement('div');
+    warning.id = 'companyNameWarning';
+    warning.className = 'alert alert-warning py-1 mb-2';
+    warning.textContent = 'Please enter a company name.';
+    resultDiv.insertBefore(warning, companyNameInput); // <-- insert just before the input
     return;
   }
 
   fetch('/api/stocks/', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ symbol, company_name: companyName })
+    body: JSON.stringify({ symbol, company_name: companyNameInput.value })
   })
   .then(res => res.json())
   .then(data => {
     if (data.error) {
-      messageDiv.innerHTML = `<div class="alert alert-danger">${data.error}</div>`;
+      showPopup(data.error, 'danger');
     } else {
-      messageDiv.innerHTML = `<div class="alert alert-success">${data.message}</div>`;
-      document.getElementById('companyNameCombined').value = '';
+      showPopup(data.message, 'success');
+      companyNameInput.value = '';
       loadStocks();
     }
   })
   .catch(err => {
     console.error('Error adding stock:', err);
-    messageDiv.innerHTML = `<div class="alert alert-danger">Something went wrong. Please try again.</div>`;
+    showPopup('Something went wrong. Please try again.', 'danger');
   });
 }
+
 
 
 

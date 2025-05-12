@@ -2,7 +2,7 @@
 # References: see README (Flask Blueprints, Flask-SQLAlchemy, REST API patterns)
 
 from flask import Blueprint, request, jsonify
-from models import db, Stock
+from app.models import db, Stock
 
 # Create Blueprint API routes
 stock_routes = Blueprint('stock_routes', __name__)

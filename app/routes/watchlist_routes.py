@@ -2,8 +2,8 @@
 # References: see README (Flask Blueprints, Flask-SQLAlchemy, REST API patterns)
 
 from flask import Blueprint, request, jsonify
-from models import db, Watchlist, Stock
-from stock_api import fetch_stock_data 
+from app.models import db, Watchlist, Stock
+from app.stock_api import fetch_stock_data 
 
 # Create Blueprint for watchlist routes
 watchlist_routes = Blueprint('watchlist_routes', __name__)
