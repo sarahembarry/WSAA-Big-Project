@@ -33,7 +33,7 @@ def fetch_stock_data(symbol, function='TIME_SERIES_DAILY'):
     latest_data = time_series[latest_date]
 
     return {
-        'price': round(float(latest_data['4. close']), 2),
+        'price': round(float(latest_data['4. close']), 2),  # Closing price rounded to 2 decimals
         'timestamp': latest_date
     }
 

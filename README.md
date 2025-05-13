@@ -246,6 +246,22 @@ WSAA-Big-Project/
 | Python Modules & Imports | [Real Python – Python Modules and Packages](https://realpython.com/python-modules-packages/) | Imports across project |
 | API Testing | [Postman Docs – Sending Requests](https://learning.postman.com/docs/sending-requests/requests/) | Manual API testing |
 
+### Google Gemini
+Gemini was used as a resource to explore UI enhancements, understand best practices, and compare hosting options during development.
+Below are the prompts used:
+
+* What’s a best practice folder structure for a Flask app?
+* What’s a best practice folder structure for a Flask app using Blueprints and static files?
+* What are some simple UI ideas to make a Flask app feel more interactive and polished?
+* Can I refresh data in a Bootstrap card without a full page reload?
+* How can I clear form fields using JavaScript?
+* How do I show a popup message in the corner of the screen after a user submits a form?
+* What charts can I create with JavaScript?
+* Best practices for structuring HTML with Bootstrap
+* What’s the difference between PythonAnywhere and Render for hosting?
+* How do I deploy a Flask project to PythonAnywhere?
+
+---
 
 
 
