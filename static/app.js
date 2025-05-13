@@ -1,10 +1,9 @@
-// JavaScript fetch-based form submission (see README for references: fetch API, preventDefault, JSON.stringify)
+// JavaScript fetch-based form submission
 
 
-// Combined Search + Add to Stocks
-// Search for live stock data by symbol, show result, allow entering company name, then add it
-
-
+// -------------------------------
+// Show temporary popup (success, error, info)
+// -------------------------------
 function showPopup(message, type = 'info') {
   const popup = document.createElement('div');
   popup.className = `custom-popup alert alert-${type}`;
@@ -13,7 +12,7 @@ function showPopup(message, type = 'info') {
   setTimeout(() => popup.remove(), 3000);
 }
 
-// Inject CSS for popup if not present
+// Inject popup styles once (if missing)
 if (!document.getElementById('popup-style')) {
   const style = document.createElement('style');
   style.id = 'popup-style';
@@ -34,33 +33,28 @@ if (!document.getElementById('popup-style')) {
 }
 
 
-
-
-
-
-
-
-
-
-
-
-
+// ----------------------------
+// Handle Stock Search + Add UI
+// ----------------------------
+// Attach submit event listener to the stock search/add form
 document.getElementById('searchAddStockForm').addEventListener('submit', handleSearchAddFormSubmit);
 
 function handleSearchAddFormSubmit(e) {
   e.preventDefault();
+
+  // Extract user input
   const symbol = document.getElementById('searchSymbolCombined').value.trim().toUpperCase();
   const resultDiv = document.getElementById('searchAddResult');
   const submitBtn = e.target.querySelector('button[type="submit"]');
-  const messageDiv = document.getElementById('stockMessage'); 
-  messageDiv.innerHTML = '';  
+  const messageDiv = document.getElementById('stockMessage');
 
+  // Reset UI before fetch
+  messageDiv.innerHTML = '';
   resultDiv.innerHTML = '';
   submitBtn.disabled = true;
   submitBtn.innerHTML = `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...`;
 
-
-  // Fetch live stock data
+  // Fetch live price from backend
   fetch(`/api/live/${symbol}`)
     .then(res => res.json())
     .then(data => {
@@ -68,43 +62,32 @@ function handleSearchAddFormSubmit(e) {
       submitBtn.innerHTML = `Get Stock Data`;
 
       if (data.error) {
-        const debugInfo = data.debug
-          ? `<br><small class="text-muted">${JSON.stringify(data.debug)}</small>`
-          : '';
+        const debugInfo = data.debug ? `<br><small class="text-muted">${JSON.stringify(data.debug)}</small>` : '';
         resultDiv.innerHTML = `<div class="alert alert-danger mt-2">${data.error}${debugInfo}</div>`;
         return;
       }
-    
 
-      // Display result info and input
+      // Show price and input field to name the company
       resultDiv.innerHTML = `
-      <div class="alert alert-info fade show mt-2" role="alert">
-        <strong>${symbol}</strong><br>
-        Price: $${data.price}<br>
-        Date: ${data.timestamp}
-      </div>
-      <input type="text" id="companyNameCombined" class="form-control mb-2 mt-2" placeholder="Enter Company Name" required>
-      <small class="text-muted mb-2 d-block">Add a custom company name for this stock before saving.</small>
-      <button class="btn btn-primary" onclick="addStockFromSearch('${symbol}')">Add to Stocks</button>
-      <canvas id="historicalChart" class="mt-4" height="100"></canvas>
-    `;
-    
+        <div class="alert alert-info fade show mt-2" role="alert">
+          <strong>${symbol}</strong><br>
+          Price: $${data.price}<br>
+          Date: ${data.timestamp}
+        </div>
+        <input type="text" id="companyNameCombined" class="form-control mb-2 mt-2" placeholder="Enter Company Name" required>
+        <small class="text-muted mb-2 d-block">Add a custom company name for this stock before saving.</small>
+        <button class="btn btn-primary" onclick="addStockFromSearch('${symbol}')">Add to Stocks</button>
+        <canvas id="historicalChart" class="mt-4" height="100"></canvas>
+      `;
 
-      // Fetch historical data for chart
+      // Fetch and render 30-day price history chart
       fetch(`/api/historical/${symbol}`)
         .then(res => res.json())
         .then(prices => {
           const existingChart = Chart.getChart("historicalChart");
-          if (existingChart) existingChart.destroy(); // avoid duplicates
+          if (existingChart) existingChart.destroy();
 
-          let canvas = document.getElementById('historicalChart');
-          if (!canvas) {
-            canvas = document.createElement('canvas');
-            canvas.id = 'historicalChart';
-            canvas.height = 100;
-            resultDiv.appendChild(canvas);
-          }
-
+          const canvas = document.getElementById('historicalChart');
           const ctx = canvas.getContext('2d');
           new Chart(ctx, {
             type: 'line',
@@ -136,56 +119,61 @@ function handleSearchAddFormSubmit(e) {
       console.error('Error:', err);
       submitBtn.disabled = false;
       submitBtn.innerHTML = `Get Stock Data`;
-      resultDiv.innerHTML = `<div class="alert alert-danger mt-2" role="alert">Error fetching stock data. Please try again.</div>`;
+      resultDiv.innerHTML = `<div class="alert alert-danger mt-2">Error fetching stock data. Please try again.</div>`;
     });
 }
 
 
-
-
+// -----------------------------
+// Add Stock from Search Result
+// -----------------------------
 function addStockFromSearch(symbol) {
   const companyNameInput = document.getElementById('companyNameCombined');
   const resultDiv = document.getElementById('searchAddResult');
 
-  // Remove any previous warning
+  // Clear any previous warning message
   const existingAlert = document.getElementById('companyNameWarning');
   if (existingAlert) existingAlert.remove();
 
+  // Validate input: require company name
   if (!companyNameInput.value.trim()) {
     const warning = document.createElement('div');
     warning.id = 'companyNameWarning';
     warning.className = 'alert alert-warning py-1 mb-2';
     warning.textContent = 'Please enter a company name.';
-    resultDiv.insertBefore(warning, companyNameInput); // <-- insert just before the input
+    resultDiv.insertBefore(warning, companyNameInput);
     return;
   }
 
+  // Send stock data to backend
   fetch('/api/stocks/', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ symbol, company_name: companyNameInput.value })
+    body: JSON.stringify({
+      symbol,
+      company_name: companyNameInput.value
+    })
   })
-  .then(res => res.json())
-  .then(data => {
-    if (data.error) {
-      showPopup(data.error, 'danger');
-    } else {
-      showPopup(data.message, 'success');
-      companyNameInput.value = '';
-      loadStocks();
-    }
-  })
-  .catch(err => {
-    console.error('Error adding stock:', err);
-    showPopup('Something went wrong. Please try again.', 'danger');
-  });
+    .then(res => res.json())
+    .then(data => {
+      if (data.error) {
+        showPopup(data.error, 'danger');  // Show error message
+      } else {
+        showPopup(data.message, 'success');  // Show success message
+        companyNameInput.value = '';
+        loadStocks();  // Reload stock list
+      }
+    })
+    .catch(err => {
+      console.error('Error adding stock:', err);
+      showPopup('Something went wrong. Please try again.', 'danger');
+    });
 }
 
 
-
-
-
-// Load all stocks and display them with action buttons
+// -----------------------------
+// Load All Stocks
+// -----------------------------
 function loadStocks() {
   fetch('/api/stocks/')
     .then(response => response.json())
@@ -193,11 +181,13 @@ function loadStocks() {
       const container = document.getElementById('stocksContainer');
       container.innerHTML = '';
 
+      // Show message if no stocks exist
       if (data.length === 0) {
         container.innerHTML = '<div class="text-muted">No stocks added.</div>';
         return;
       }
 
+      // Render each stock with action buttons
       data.forEach(stock => {
         const stockCard = `
           <div class="d-flex justify-content-between align-items-center mb-3 p-2 border rounded">
@@ -218,8 +208,9 @@ function loadStocks() {
 }
 
 
-
-// Load all watchlist items
+// -----------------------------
+// Load Watchlist Items
+// -----------------------------
 function loadWatchlist() {
   fetch('/api/watchlist/')
     .then(response => response.json())
@@ -227,11 +218,13 @@ function loadWatchlist() {
       const container = document.getElementById('watchlistContainer');
       container.innerHTML = '';
 
+      // Show message if watchlist is empty
       if (data.length === 0) {
         container.innerHTML = '<div class="text-muted">No items in watchlist.</div>';
         return;
       }
 
+      // Render each watchlist entry with refresh and remove buttons
       data.forEach(item => {
         const watchlistCard = `
           <div class="d-flex justify-content-between align-items-center mb-2 p-2 border rounded">
@@ -252,118 +245,127 @@ function loadWatchlist() {
 }
 
 
-
-
-
-// Add stock to watchlist by ID (via POST /api/watchlist)
+// -----------------------------
+// Add Stock to Watchlist
+// -----------------------------
 function addToWatchlist(stockId) {
   fetch('/api/watchlist/', {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({ stock_id: stockId })
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ stock_id: stockId })  // Send stock ID in request 
   })
-  .then(response => response.json())
-  .then(data => {
-    showPopup(data.message, data.message.includes('already') ? 'warning' : 'success');
-    loadWatchlist();
-  })
-  .catch(err => {
-    console.error('Error:', err);
-    showPopup('Error adding to watchlist.', 'danger');
-  });
+    .then(response => response.json())
+    .then(data => {
+      // Show warning if already in watchlist, otherwise success
+      const type = data.message.includes('already') ? 'warning' : 'success';
+      showPopup(data.message, type);
+      loadWatchlist(); // Reload updated watchlist
+    })
+    .catch(err => {
+      console.error('Error:', err);
+      showPopup('Error adding to watchlist.', 'danger');
+    });
 }
 
 
-
-
-
-
-// Remove from watchlist 
-
-
+// -----------------------------
+// Remove from Watchlist 
+// -----------------------------
 function removeFromWatchlist(watchlistId) {
+  // Store ID and show confirmation modal
   watchlistToRemove = watchlistId;
   const modal = new bootstrap.Modal(document.getElementById('confirmRemoveModal'));
   modal.show();
 }
 
+// Confirm removal when user clicks modal button
 document.getElementById('confirmRemoveBtn').addEventListener('click', () => {
   if (!watchlistToRemove) return;
 
   fetch(`/api/watchlist/${watchlistToRemove}`, {
-    method: 'DELETE'
+    method: 'DELETE'  // Send DELETE request to backend
   })
     .then(res => res.json())
     .then(data => {
-      showPopup(data.message, 'success');
-      loadWatchlist();
+      showPopup(data.message, 'success');  // Show confirmation
+      loadWatchlist();  // Refresh list
     })
     .catch(err => {
       console.error('Error removing from watchlist:', err);
       showPopup('Error removing from watchlist.', 'danger');
     })
     .finally(() => {
+      // Hide modal and reset ID
       bootstrap.Modal.getInstance(document.getElementById('confirmRemoveModal')).hide();
       watchlistToRemove = null;
     });
 });
 
 
-
-
-// Update a stock's company name
+// -----------------------------
+// Update Stock Company Name
+// -----------------------------
 function updateStock(stockId) {
+  // Store stock ID and show update modal
   stockToUpdate = stockId;
   const modal = new bootstrap.Modal(document.getElementById('updateStockModal'));
   modal.show();
 }
 
-document.getElementById('confirmUpdateBtn').addEventListener('click', function () {
+// Handle update confirmation
+document.getElementById('confirmUpdateBtn').addEventListener('click', () => {
   const newName = document.getElementById('updateCompanyNameInput').value.trim();
+
+  // Validate input
   if (!newName) {
     showPopup('Please enter a valid company name.', 'warning');
     return;
   }
 
+  // Send update request to backend
   fetch(`/api/stocks/${stockToUpdate}`, {
     method: 'PUT',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ company_name: newName })
   })
-  .then(res => res.json())
-  .then(data => {
-    const modal = bootstrap.Modal.getInstance(document.getElementById('updateStockModal'));
-    modal.hide();
-    showPopup(data.message, 'success');
-    loadStocks();
-  })
-  .catch(err => {
-    console.error('Error updating stock:', err);
-    showPopup('Error updating stock.', 'danger');
-  });
+    .then(res => res.json())
+    .then(data => {
+      // Hide modal, show message, refresh list
+      const modal = bootstrap.Modal.getInstance(document.getElementById('updateStockModal'));
+      modal.hide();
+      showPopup(data.message, 'success');
+      loadStocks();
+    })
+    .catch(err => {
+      console.error('Error updating stock:', err);
+      showPopup('Error updating stock.', 'danger');
+    });
 });
 
 
-//delete stock
+// -----------------------------
+// Delete Stock with Confirmation
+// -----------------------------
 function deleteStock(stockId) {
+  // Store ID and show confirm modal
   stockToDelete = stockId;
   const modal = new bootstrap.Modal(document.getElementById('confirmStockDeleteModal'));
   modal.show();
 }
 
-document.getElementById('confirmStockDeleteBtn').addEventListener('click', function () {
+// Confirm delete action
+document.getElementById('confirmStockDeleteBtn').addEventListener('click', () => {
   fetch(`/api/stocks/${stockToDelete}`, {
     method: 'DELETE'
   })
     .then(res => res.json())
     .then(data => {
+      // Hide modal, show message, refresh
       const modal = bootstrap.Modal.getInstance(document.getElementById('confirmStockDeleteModal'));
       modal.hide();
       showPopup(data.message, 'success');
-      loadStocks();
-      loadWatchlist();
+      loadStocks();     // Refresh stocks
+      loadWatchlist();  // Refresh watchlist 
     })
     .catch(err => {
       console.error('Error deleting stock:', err);
@@ -372,16 +374,18 @@ document.getElementById('confirmStockDeleteBtn').addEventListener('click', funct
 });
 
 
-
-
-// Fetch  prices for all stocks
+// -----------------------------
+// Load Live Prices for All Stocks
+// -----------------------------
 function loadLivePrices() {
+  // Fetch all tracked stocks
   fetch('/api/stocks/')
     .then(response => response.json())
     .then(stocks => {
       const container = document.getElementById('livePricesContainer');
       container.innerHTML = '';
 
+      // For each stock, fetch its recent price and display it
       stocks.forEach(stock => {
         fetch(`/api/live/${stock.symbol}`)
           .then(res => res.json())
@@ -401,8 +405,11 @@ function loadLivePrices() {
 }
 
 
-// Refresh snapshot for a watchlist item
+// -------------------------------------
+// Refresh Snapshot for Watchlist Entry
+// -------------------------------------
 function refreshSnapshot(watchlistId) {
+  // Send PUT request to refresh snapshot data
   fetch(`/api/watchlist/${watchlistId}/refresh`, {
     method: 'PUT'
   })
@@ -414,7 +421,7 @@ function refreshSnapshot(watchlistId) {
       }
 
       showPopup(data.message, 'success');
-      loadWatchlist(); // Reload updated data
+      loadWatchlist(); // Reload updated watchlist
     })
     .catch(err => {
       console.error('Error refreshing snapshot:', err);
@@ -423,22 +430,11 @@ function refreshSnapshot(watchlistId) {
 }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-// Run when page loads
+// -----------------------
+// Initialize on Page Load
+// -----------------------
 window.onload = function () {
-  loadStocks();
-  loadWatchlist();
- loadLivePrices(); // Uncomment when needed manually
+  loadStocks();       // Load all stock entries
+  loadWatchlist();    // Load all watchlist entries
+  loadLivePrices();   // Load live prices for all stocks
 };
