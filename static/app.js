@@ -314,7 +314,8 @@ function updateStock(stockId) {
 
 // Handle update confirmation
 document.getElementById('confirmUpdateBtn').addEventListener('click', () => {
-  const newName = document.getElementById('updateCompanyNameInput').value.trim();
+  const input = document.getElementById('updateCompanyNameInput');
+  const newName = input.value.trim();
 
   // Validate input
   if (!newName) {
@@ -330,9 +331,10 @@ document.getElementById('confirmUpdateBtn').addEventListener('click', () => {
   })
     .then(res => res.json())
     .then(data => {
-      // Hide modal, show message, refresh list
+      // Hide modal, clear input, show message, refresh list
       const modal = bootstrap.Modal.getInstance(document.getElementById('updateStockModal'));
       modal.hide();
+      input.value = ''; 
       showPopup(data.message, 'success');
       loadStocks();
     })

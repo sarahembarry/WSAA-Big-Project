@@ -1,7 +1,20 @@
 # Stock Tracker App – WSAA Big Project
+
+## Table of Contents
+
+- [Live App](#live-app-hosted)
+- [Features](#features)
+- [Technologies](#technologies)
+- [Route Overview](#route-overview)
+- [Getting Started (Local)](#getting-started-local)
+- [API Rate Limiting](#api-rate-limiting)
+- [Project Structure](#project-structure)
+- [References](#references)
+
+
 This is a  web app built for the **Web Services and Applications** module. It lets users **search stock symbols**, **track up to date prices**, and **manage a personal watchlist** using a Flask-based REST API. Data is fetched from the Alpha Vantage API and stored locally with SQLite.
 
-🔗 **Live App Hosted**: [https://sarahbarry.pythonanywhere.com](https://sarahbarry.pythonanywhere.com)  
+ **Live App Hosted**: [https://sarahbarry.pythonanywhere.com](https://sarahbarry.pythonanywhere.com)  
 
 ---
 
