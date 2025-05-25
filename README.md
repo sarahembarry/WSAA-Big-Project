@@ -59,10 +59,10 @@ The application uses Flask Blueprints to organise routes into two main modules: 
   Adds a new stock with a custom company name.
 
 - `PUT /api/stocks/<id>`  
-  Updates the company name for a specific stock by ID.
+  Updates the company name for a specific stock.
 
 - `DELETE /api/stocks/<id>`  
-  Deletes a stock by ID.
+  Deletes a stock.
 
 ###  `/api/watchlist` Routes
 
@@ -70,7 +70,7 @@ The application uses Flask Blueprints to organise routes into two main modules: 
   Returns all watchlist items with snapshot prices.
 
 - `POST /api/watchlist/`  
-  Adds a stock to the watchlist by stock ID.
+  Adds a stock to the watchlist.
 
 - `PUT /api/watchlist/<id>/refresh`  
   Refreshes snapshot price for a watchlist item.
@@ -81,7 +81,7 @@ The application uses Flask Blueprints to organise routes into two main modules: 
 ###  Other API Routes
 
 - `GET /api/live/<symbol>`  
-  Fetches the latest live price for a stock symbol.
+  Fetches the latest live price for a stock.
 
 - `GET /api/historical/<symbol>`  
   Returns 30-day historical prices for a stock.
